@@ -67,7 +67,7 @@ get.norm_values <- function (.data, select_columns = NULL) {
 ### Data Import ####
 
 # Reading the data file
-Data <- read_tsv("BoknisEck_1957-2014.csv",col_types = "Tdddddddddddddddddd")
+Data <- read_tsv("BoknisEck_1957-2014.tsv",col_types = "Tdddddddddddddddddd")
 
 
 
@@ -89,11 +89,14 @@ for(i in 1:52){
 
 # Standardization of all variables (features and label)
 ## remove NAs
-Data <- na.omit(Data %>% select(c(-`Date/Time`, -Longitude, -Latitude,
+
+Data <- na.omit(Data %>% select(c(-Longitude, -Latitude,
                                   -Cast, -`Flag (NO3)`,
                                   -`Flag (NO2)`,-`Flag (Oxygen)`,
                                   -`Flag (PO4)`, -`Flag (SiO2)`,-Week)))
 
+date_time <- Data["Date/Time"]
+Data <- Data %>% select(-`Date/Time`)
 norm_list <- colnames(Data) # vector of all relevant variables
 
 
@@ -131,6 +134,7 @@ test_labels = Data_norm[-train_ind, label]
 
 Training <- cbind(train_dataset,train_labels)
 Testing <- cbind(test_dataset,test_labels)
-write.csv(Training,"norm_train.csv")
-write.csv(Testing, "norm_test.csv")
-1234
+Data_norm <- cbind(date_time,Data_norm)
+write_delim(Training,"norm_train.tsv", delim = "\t")
+write_delim(Testing, "norm_test.tsv", delim = "\t")
+write_delim(Data_norm, "data_norm.tsv", delim = "\t")
