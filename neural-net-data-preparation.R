@@ -135,6 +135,7 @@ test_labels = Data_norm[-train_ind, label]
 Training <- cbind(train_dataset,train_labels)
 Testing <- cbind(test_dataset,test_labels)
 Data_norm <- cbind(date_time,Data_norm)
+Data_norm <- Data_norm %>% select(-Week_01, -Week_40)
 write_delim(Training,"norm_train.tsv", delim = "\t")
 write_delim(Testing, "norm_test.tsv", delim = "\t")
 write_delim(Data_norm, "data_norm.tsv", delim = "\t")
